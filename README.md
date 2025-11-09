@@ -106,6 +106,7 @@ Docker Compose Reference
 ⚙️ Arquitectura del Sistema
 ```mermaid
 flowchart LR
-    A["Archivo original (PDF, TXT, DOCX)"] --> B["Agente Analizador"]
-    B -->|Descripción semántica| C["Agente Renombrador"]
-    C --> D["Archivo renombrado y guardado en /data/output"]
+    A["Archivo original"] --> B["Agente Analizador"]
+    B --> C["GroupChat / Coordinación AutoGen"]
+    C --> D["Agente Renombrador"]
+    D --> E["Archivo renombrado"]

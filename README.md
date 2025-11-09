@@ -104,6 +104,7 @@ Python Official Docs
 Docker Compose Reference
 
 ⚙️ Arquitectura del Sistema
+```mermaid
 flowchart LR
     A["Archivo original (PDF, TXT, DOCX)"] --> B["Agente Analizador"]
     B -->|Descripción semántica| C["Agente Renombrador"]

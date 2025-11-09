@@ -62,12 +62,12 @@ Ollama descargará el modelo mistral automáticamente.
 ## ▶️ Instrucciones de uso
 
 1. Clonar el repositorio:
-
+```bash
 git clone https://github.com/<usuario>/agent-renombramiento-local.git
 cd agent-renombramiento-local
 
 2. Construir y levantar los servicios:
-
+```bash
 docker compose up -d --build
 
 

@@ -37,19 +37,19 @@ El archivo se renombra y se guarda en /data/output.
 Todo el proceso se ejecuta de manera local, sin conexión a la nube.
 
 ## 📁 Estructura del Proyecto
-agent-renombramiento-local/
-├── docker-compose.yml
-├── Dockerfile
-├── agents/
-│   ├── analyzer_agent.py
-│   ├── rename_agent.py
-│   └── __init__.py
-├── main.py
-├── requirements.txt
-├── data/
-│   ├── input/
-│   └── output/
-└── README.md
+    agent-renombramiento-local/
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── agents/
+    │   ├── analyzer_agent.py
+    │   ├── rename_agent.py
+    │   └── __init__.py
+    ├── main.py
+    ├── requirements.txt
+    ├── data/
+    │   ├── input/
+    │   └── output/
+    └── README.md
 
 ## 🧰 Requisitos del Sistema
 
@@ -82,8 +82,8 @@ Ollama descargará el modelo mistral automáticamente.
 
 
 5. Colocar archivos a procesar en:
-
-/data/input/
+    ```bash
+    /data/input/
 
 🔐 Consideraciones de Privacidad
 

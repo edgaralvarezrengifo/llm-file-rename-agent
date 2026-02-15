@@ -1,47 +1,63 @@
-from autogen import GroupChat, UserProxyAgent
 from agents.analyzer_agent import AnalyzerAgent
 from agents.rename_agent import RenameAgent
 import os, time
 
 # Configuración del modelo Ollama
 LLM_CONFIG = {
-    "model": "mistral",
-    "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    "config_list": [
+        {
+            "model": "phi3:mini",
+            "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434") + "/v1",
+            "api_key": "ollama",  # Ollama no requiere API key, pero AutoGen espera una
+        }
+    ],
+    "cache_seed": None,  # Desactivar cache
 }
 
 # Inicialización de agentes
-analyzer = AnalyzerAgent(name="Analyzer", llm_config=LLM_CONFIG)
-renamer = RenameAgent(name="Renamer", llm_config=LLM_CONFIG)
-
-# Crear un GroupChat donde ambos agentes colaboran
-group = GroupChat(
-    agents=[analyzer, renamer],
-    messages=[]
+print("🔧 Inicializando agentes...")
+analyzer = AnalyzerAgent(
+    name="Analyzer",
+    system_message="Eres un agente que analiza documentos y describe su contenido de forma clara y concisa en máximo 2 frases.",
+    llm_config=LLM_CONFIG
 )
 
-# Agente usuario (proxy del sistema)
-user = UserProxyAgent(name="SystemProxy", group_chat=group)
+renamer = RenameAgent(
+    name="Renamer",
+    system_message="Eres un agente que genera nombres de archivo descriptivos en formato snake_case, sin acentos ni caracteres especiales. Responde SOLO con el nombre del archivo, nada más.",
+    llm_config=LLM_CONFIG
+)
 
 input_dir = "data/input"
-print("🤖 Agente de renombramiento iniciado. Esperando archivos...")
+print("🤖 Agente de renombramiento iniciado. Esperando archivos...\n")
 
 while True:
+    files_processed = False
+    
     for file in os.listdir(input_dir):
         if not file.lower().endswith((".pdf", ".txt")):
             continue
 
         file_path = os.path.join(input_dir, file)
-        print(f"\n📄 Procesando archivo: {file}")
+        files_processed = True
+        
+        print(f"{'='*60}")
+        print(f"📄 Procesando archivo: {file}")
+        print(f"{'='*60}")
 
-        # Agente 1: análisis del contenido
+        # Paso 1: Extraer contenido del archivo
+        print("\n🔍 Paso 1: Leyendo contenido del archivo...")
         description = analyzer.analyze_file(file_path)
+        print(f"✓ Análisis completado")
+        print(f"📝 Descripción: {description}\n")
 
-        # Conversación multiagente (coordinada)
-        message = f"El archivo contiene el siguiente contenido:\n{description}\nGenera un nombre de archivo adecuado."
-        result = user.initiate_chat(message)
-
-        # Agente 2: ejecutar el renombramiento localmente
-        new_name = renamer.rename_based_on_description(file_path, str(result))
+        # Paso 2: Generar nombre basado en la descripción
+        print("✏️  Paso 2: Generando nuevo nombre...")
+        new_name = renamer.rename_based_on_description(file_path, description)
         print(f"✅ Archivo renombrado como: {os.path.basename(new_name)}")
-
+        print(f"{'='*60}\n")
+    
+    if not files_processed:
+        print("💤 No hay archivos para procesar. Esperando...")
+    
     time.sleep(10)

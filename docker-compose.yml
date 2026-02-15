@@ -1,6 +1,7 @@
 services:
   ollama:
     image: ollama/ollama:latest
+    container_name: ollama
     # Recommended for GPU support (uncomment if you have NVIDIA GPU)
     # runtime: nvidia
     # environment:
@@ -23,4 +24,5 @@ services:
       - ./data:/app/data
 
     restart: unless-stopped
+
 

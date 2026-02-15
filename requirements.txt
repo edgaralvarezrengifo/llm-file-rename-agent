@@ -1,5 +1,6 @@
-autogenstudio
+pyautogen==0.2.35
 requests
 python-dotenv
 PyPDF2
+
 watchdog

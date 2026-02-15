@@ -69,6 +69,7 @@ Ollama descargará el modelo mistral automáticamente.
 2. Construir y levantar los servicios:
    ```bash
    docker compose up -d --build
+   docker exec ollama ollama pull mistral
 
 
 3. Verificar los contenedores:
